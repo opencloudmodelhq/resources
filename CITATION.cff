@@ -9,6 +9,8 @@ authors:
     affiliation: OpenCloudModel
     orcid: "https://orcid.org/0000-0003-0338-4567"
 version: "0.1.0"
+date-released: "2026-11-16"
+doi: 10.5281/zenodo.24280135
 repository-code: "https://github.com/opencloudmodelhq/resources"
 license: CC-BY-4.0
 keywords:

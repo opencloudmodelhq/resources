@@ -1,5 +1,7 @@
 # OpenCloudModel Resources
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24280135.svg)](https://doi.org/10.5281/zenodo.24280135)
+
 A vendor-neutral mapping of cloud resource concepts to the Terraform resource types and attributes of
 AWS, Azure and Google Cloud.
 

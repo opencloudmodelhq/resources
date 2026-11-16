@@ -9,6 +9,12 @@ A change to the published data is at least a minor release.
 
 ### Added
 
+- Zenodo DOI in `README.md` and `CITATION.cff`.
+
+## [0.1.0] - 2026-11-16
+
+### Added
+
 - `data/mapping.csv`, the verified mapping (empty at this point), and `data/providers.csv`.
 - `PROTOCOL.md`, placement protocol 0.1.
 - Zenodo metadata.
