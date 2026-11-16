@@ -1,0 +1,73 @@
+---
+name: Settings audit
+on:
+  schedule:
+    - cron: "41 2 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  audit:
+    name: repository settings match policy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: audit
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        id: app
+        with:
+          app-id: ${{ vars.AUDIT_APP_ID }}
+          private-key: ${{ secrets.AUDIT_APP_KEY }}
+          permission-administration: read
+          permission-secrets: read
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: stable
+          cache: false
+      - name: Export settings with the read-only audit App
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: .github/scripts/export-settings.sh "${REPOSITORY}" > settings.json
+      - name: Check settings against policy
+        id: check
+        run: |
+          code=0
+          go run github.com/open-policy-agent/conftest@v0.71.1 \
+            test --policy policy/settings --namespace settings --output json settings.json > findings.json || code=$?
+          count=$(jq '[.[].failures // [] | length] | add // 0' findings.json)
+          echo "count=${count}" >> "${GITHUB_OUTPUT}"
+          echo "${count} settings differ from policy"
+          exit "${code}"
+      - name: Open or update the drift issue
+        if: failure() && steps.check.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COUNT: ${{ steps.check.outputs.count }}
+        run: |
+          title="Settings drift found by the nightly audit"
+          {
+            echo "The nightly audit found ${COUNT} repository settings that differ from policy."
+            echo
+            echo "The findings are not posted here. A maintainer can list them locally:"
+            echo
+            echo '    .github/scripts/export-settings.sh OWNER/REPO > settings.json'
+            echo '    conftest test --policy policy/settings --namespace settings settings.json'
+          } > notice.md
+          number=$(gh issue list --state open --search "in:title \"${title}\"" --json number --jq '.[0].number')
+          if [ -n "${number}" ]; then
+            gh issue comment "${number}" --body-file notice.md
+          else
+            gh issue create --title "${title}" --body-file notice.md --label "kind:security"
+          fi

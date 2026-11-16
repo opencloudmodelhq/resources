@@ -1,0 +1,72 @@
+{
+ "@context": "https://w3id.org/ro/crate/1.1/context",
+ "@graph": [
+  {
+   "@id": "ro-crate-metadata.json",
+   "@type": "CreativeWork",
+   "conformsTo": {
+    "@id": "https://w3id.org/ro/crate/1.1"
+   },
+   "about": {
+    "@id": "./"
+   }
+  },
+  {
+   "@id": "./",
+   "@type": "Dataset",
+   "name": "OpenCloudModel Resources",
+   "description": "An open dataset that maps cloud resource concepts to the Terraform resource types and attributes of AWS, Azure and Google Cloud under vendor-neutral names. Each placement carries its source and a match grade, and the whole mapping is built by hand under a published protocol.",
+   "version": "0.1.0",
+   "datePublished": "2026-11-13",
+   "license": {
+    "@id": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "author": {
+    "@id": "https://orcid.org/0000-0003-0338-4567"
+   },
+   "publisher": {
+    "@id": "https://github.com/opencloudmodelhq"
+   },
+   "url": "https://github.com/opencloudmodelhq/resources",
+   "hasPart": [
+    {
+     "@id": "data/mapping.csv"
+    },
+    {
+     "@id": "data/providers.csv"
+    }
+   ]
+  },
+  {
+   "@id": "https://orcid.org/0000-0003-0338-4567",
+   "@type": "Person",
+   "name": "Andrew Broekman",
+   "affiliation": {
+    "@id": "https://github.com/opencloudmodelhq"
+   }
+  },
+  {
+   "@id": "https://github.com/opencloudmodelhq",
+   "@type": "Organization",
+   "name": "OpenCloudModel",
+   "url": "https://github.com/opencloudmodelhq"
+  },
+  {
+   "@id": "https://creativecommons.org/licenses/by/4.0/",
+   "@type": "CreativeWork",
+   "name": "Creative Commons Attribution 4.0 International"
+  },
+  {
+   "@id": "data/mapping.csv",
+   "@type": "File",
+   "name": "Verified mapping of vendor resources to neutral concepts",
+   "encodingFormat": "text/csv"
+  },
+  {
+   "@id": "data/providers.csv",
+   "@type": "File",
+   "name": "Pinned Terraform provider versions",
+   "encodingFormat": "text/csv"
+  }
+ ]
+}

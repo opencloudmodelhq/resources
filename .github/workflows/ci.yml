@@ -1,0 +1,83 @@
+---
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: dataset check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Licensing is complete
+        run: pipx run --spec 'reuse[charset-normalizer]==6.3.0' reuse lint
+      - name: Mapping file is well formed
+        env:
+          EXPECTED: "concept_id,domain,concept,definition,aws_term,aws_ref,aws_match,aws_source,azure_term,azure_ref,azure_match,azure_source,gcp_term,gcp_ref,gcp_match,gcp_source,verified_on,protocol_version,note"
+        run: |
+          python3 - <<'PY'
+          import csv
+          import os
+          import sys
+
+          rows = list(csv.reader(open("data/mapping.csv", newline="")))
+          head, body = rows[0], rows[1:]
+          errors = []
+          if ",".join(head) != os.environ["EXPECTED"]:
+              errors.append("unexpected header")
+          seen = set()
+          for num, cells in enumerate(body, 2):
+              row = dict(zip(head, cells))
+              if len(cells) != len(head):
+                  errors.append("row %d: wrong column count" % num)
+                  continue
+              if row["concept_id"] in seen:
+                  errors.append("row %d: concept_id repeated" % num)
+              seen.add(row["concept_id"])
+              for field in ("concept", "definition", "verified_on", "protocol_version"):
+                  if not row[field]:
+                      errors.append("row %d: %s missing" % (num, field))
+              for vendor in ("aws", "azure", "gcp"):
+                  match = row[vendor + "_match"]
+                  if match not in ("equivalent", "close", "partial", "none"):
+                      errors.append("row %d: %s_match invalid" % (num, vendor))
+                  if not row[vendor + "_source"]:
+                      errors.append("row %d: %s_source missing" % (num, vendor))
+                  if (match == "none") != (row[vendor + "_ref"] == ""):
+                      errors.append("row %d: %s_ref and %s_match disagree" % (num, vendor, vendor))
+          print("\n".join(errors))
+          sys.exit(1 if errors else 0)
+          PY
+
+  all-green:
+    name: all-green
+    if: always()
+    needs: [check]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Every job passed
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          for result in ${RESULTS}; do
+            [ "${result}" = "success" ] || exit 1
+          done

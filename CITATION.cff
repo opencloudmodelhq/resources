@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite it as below."
+type: dataset
+title: "OpenCloudModel Resources"
+abstract: "An open dataset that maps cloud resource concepts to the Terraform resource types and attributes of AWS, Azure and Google Cloud under vendor-neutral names. Each placement carries its source and a match grade, and the whole mapping is built by hand under a published protocol."
+authors:
+  - family-names: Broekman
+    given-names: Andrew
+    affiliation: OpenCloudModel
+    orcid: "https://orcid.org/0000-0003-0338-4567"
+version: "0.1.0"
+repository-code: "https://github.com/opencloudmodelhq/resources"
+license: CC-BY-4.0
+keywords:
+  - cloud resources
+  - Terraform
+  - crosswalk
+  - vendor-neutral

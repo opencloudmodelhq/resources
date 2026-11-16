@@ -1,0 +1,10 @@
+{
+  "Exclude": [
+    "^LICENSE",
+    "^LICENSES/",
+    "^data/"
+  ],
+  "Disable": {
+    "IndentSize": true
+  }
+}

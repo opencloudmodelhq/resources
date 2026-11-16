@@ -1,0 +1,35 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":dependencyDashboard",
+    ":semanticCommits"
+  ],
+  "schedule": [
+    "before 6am on monday"
+  ],
+  "minimumReleaseAge": "7 days",
+  "internalChecksFilter": "strict",
+  "labels": [
+    "kind:deps",
+    "origin:bot"
+  ],
+  "rangeStrategy": "pin",
+  "packageRules": [
+    {
+      "description": "Anything that can change published outputs waits for the owner on the dashboard",
+      "matchFileNames": [
+        "data/**"
+      ],
+      "dependencyDashboardApproval": true,
+      "automerge": false
+    },
+    {
+      "matchManagers": [
+        "github-actions",
+        "pre-commit"
+      ],
+      "groupName": "ci tooling"
+    }
+  ]
+}

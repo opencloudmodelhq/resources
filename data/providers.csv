@@ -1,0 +1,4 @@
+vendor,provider,version,resource_types
+aws,hashicorp/aws,6.71.0,1746
+azure,hashicorp/azurerm,5.12.0,1107
+gcp,hashicorp/google,8.9.0,1392

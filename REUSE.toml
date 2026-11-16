@@ -1,0 +1,15 @@
+version = 1
+
+[[annotations]]
+path = [".gitignore", "REUSE.toml", ".github/**", "policy/**", "renovate.json", ".editorconfig", ".editorconfig-checker.json",
+        "_typos.toml", ".gitlint", ".yamllint", ".markdownlint.yaml", ".pre-commit-config.yaml"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Andrew Broekman"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = ["data/**", "README.md", "PROTOCOL.md", "CITATION.cff", ".zenodo.json", "ro-crate-metadata.json",
+        "CHANGELOG.md", "CODE_OF_CONDUCT.md", "CONTRIBUTING.md", "SECURITY.md", "SUPPORT.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Andrew Broekman"
+SPDX-License-Identifier = "CC-BY-4.0"
