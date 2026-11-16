@@ -16,7 +16,7 @@ Open an issue first for anything bigger than a typo, so we can agree on the appr
 
 ## Merges
 
-Pull requests are merged by rebase, with linear history.
+Pull requests are merged by squash, with linear history: one signed commit per pull request reaches `main`.
 
 ## Sign your work (DCO)
 
