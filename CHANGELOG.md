@@ -11,6 +11,10 @@ A change to the published data is at least a minor release.
 
 - Zenodo DOI in `README.md` and `CITATION.cff`.
 
+### Changed
+
+- Pull requests are merged by squash, so every commit on `main` is signed.
+
 ## [0.1.0] - 2026-11-16
 
 ### Added
